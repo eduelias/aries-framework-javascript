@@ -1,6 +1,19 @@
 import logger from '../logger';
-import { Connection, OutboundMessage, InitConfig, Agency } from './types';
-import { encodeInvitationToUrl, decodeInvitationFromUrl } from './helpers';
+import { decodeInvitationFromUrl, encodeInvitationToUrl } from './helpers';
+import { handleBasicMessage } from './messaging/basicmessage/handlers';
+import { createBasicMessage, MessageType as BasicMessageMessageType } from './messaging/basicmessage/messages';
+import { ConnectionService } from './messaging/connections/ConnectionService';
+import { MessageType as ConnectionsMessageType } from './messaging/connections/messages';
+import { createOutboundMessage } from './messaging/helpers';
+import { Handler } from './messaging/interface';
+import { handleForwardMessage, handleRouteUpdateMessage } from './messaging/routing/handlers';
+import { RoutingService } from './messaging/routing/RoutingService';
+import {
+  Agency,
+  Connection,
+  InitConfig,
+  OutboundMessage
+  } from './types';
 import { IndyWallet, Wallet } from './Wallet';
 import {
   handleInvitation,
@@ -8,19 +21,11 @@ import {
   handleConnectionResponse,
   handleAckMessage,
 } from './messaging/connections/handlers';
-import { ConnectionService } from './messaging/connections/ConnectionService';
-import { MessageType as ConnectionsMessageType } from './messaging/connections/messages';
-import { handleBasicMessage } from './messaging/basicmessage/handlers';
-import { MessageType as BasicMessageMessageType, createBasicMessage } from './messaging/basicmessage/messages';
-import { handleForwardMessage, handleRouteUpdateMessage } from './messaging/routing/handlers';
 import {
   MessageType as RoutingMessageType,
   createForwardMessage,
   createRouteUpdateMessage,
 } from './messaging/routing/messages';
-import { RoutingService } from './messaging/routing/RoutingService';
-import { Handler } from './messaging/interface';
-import { createOutboundMessage } from './messaging/helpers';
 
 class Agent {
   config: InitConfig;
@@ -58,7 +63,7 @@ class Agent {
   /**
    * This method will be probably used only when agent is running as routing agency
    */
-  getAgentDid() {
+  getAgentDid(): any {
     return this.wallet.getPublicDid();
   }
 
