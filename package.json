@@ -1,8 +1,8 @@
 {
   "name": "aries-sdk-ts",
-  "version": "0.5.0",
-  "main": "index.js",
-  "types": "build/index.d.ts",
+  "version": "0.5.2",
+  "main": "build/**/*.js",
+  "types": "build/**/*.d.ts",
   "license": "MIT",
   "scripts": {
     "tsc": "tsc",
