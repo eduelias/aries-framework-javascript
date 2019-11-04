@@ -1,8 +1,8 @@
 import { InboundMessage } from '../../types';
-import { createAckMessage } from '../connections/messages';
 import { ConnectionService } from '../connections/ConnectionService';
-import { Context } from '../interface';
+import { createAckMessage } from '../connections/messages';
 import { createOutboundMessage } from '../helpers';
+import { Context } from '../interface';
 
 export function handleBasicMessage(connectionService: ConnectionService) {
   return async (inboundMessage: InboundMessage, context: Context) => {

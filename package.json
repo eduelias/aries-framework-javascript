@@ -1,7 +1,7 @@
 {
-  "name": "aries-sdk-ts",
-  "version": "0.5.2",
-  "main": "build/**/*.js",
+  "name": "aries-sdk-ts-beta",
+  "version": "0.5.4",
+  "main": "build/index.js",
   "types": "build/**/*.d.ts",
   "license": "MIT",
   "scripts": {
@@ -10,16 +10,18 @@
     "test": "jest",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/agency.ts",
     "prod": "tsc && node ./build/agency.js",
+    "generate-barrels": "barrelsby --delete -s flat -d src -q",
     "prepublish": "tsc"
   },
   "devDependencies": {
-    "@types/dotenv": "^6.1.1",
-    "@types/jest": "^24.0.19",
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "^24.0.20",
     "@types/lodash.isempty": "^4.4.6",
     "@types/node-fetch": "^2.5.2",
     "@types/uuid": "^3.4.5",
-    "@typescript-eslint/eslint-plugin": "^2.5.0",
-    "@typescript-eslint/parser": "^2.5.0",
+    "@typescript-eslint/eslint-plugin": "^2.6.0",
+    "@typescript-eslint/parser": "^2.6.0",
+    "barrelsby": "^2.2.0",
     "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",

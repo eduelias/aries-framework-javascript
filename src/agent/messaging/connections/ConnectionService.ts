@@ -1,4 +1,9 @@
-import { Connection, ConnectionState, InitConfig, Agency } from '../../types';
+import {
+  Agency,
+  Connection,
+  ConnectionState,
+  InitConfig
+  } from '../../types';
 import { Wallet } from '../../Wallet';
 import { createInvitationMessage } from './messages';
 
@@ -75,7 +80,7 @@ class ConnectionService {
   private getEndpoint(agency?: Agency) {
     const connection = agency && agency.connection;
     const endpoint = connection && connection.theirDidDoc && connection.theirDidDoc.service[0].serviceEndpoint;
-    return endpoint ? `${endpoint}` : `${this.config.url}:${this.config.port}/msg`;
+    return endpoint ? `${endpoint}` : `${this.config.url}:${this.config.url.port}/msg`;
   }
 
   private getRoutingKeys(agency?: Agency) {

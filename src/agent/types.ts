@@ -1,6 +1,5 @@
 export interface InitConfig {
-  url: string;
-  port: string | number;
+  url: URL;
   label: string;
   walletName: string;
   walletKey: string;

@@ -1,8 +1,8 @@
-import { InboundMessage, ConnectionState } from '../../types';
-import { ConnectionService } from './ConnectionService';
-import { createConnectionRequestMessage, createAckMessage, createConnectionResponseMessage } from './messages';
-import { Context } from '../interface';
+import { ConnectionState, InboundMessage } from '../../types';
 import { createOutboundMessage } from '../helpers';
+import { Context } from '../interface';
+import { ConnectionService } from './ConnectionService';
+import { createAckMessage, createConnectionRequestMessage, createConnectionResponseMessage } from './messages';
 
 export function handleInvitation(connectionService: ConnectionService) {
   return async (inboundMessage: InboundMessage, context: Context) => {

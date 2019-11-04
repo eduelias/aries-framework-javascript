@@ -1,11 +1,11 @@
 import logger from '../logger';
 import { decodeInvitationFromUrl, encodeInvitationToUrl } from './helpers';
 import { handleBasicMessage } from './messaging/basicmessage/handlers';
-import { createBasicMessage, MessageType as BasicMessageMessageType } from './messaging/basicmessage/messages';
+import { createBasicMessage } from './messaging/basicmessage/messages';
 import { ConnectionService } from './messaging/connections/ConnectionService';
-import { MessageType as ConnectionsMessageType } from './messaging/connections/messages';
 import { createOutboundMessage } from './messaging/helpers';
 import { Handler } from './messaging/interface';
+import { MessageType } from './messaging/messagetype';
 import { handleForwardMessage, handleRouteUpdateMessage } from './messaging/routing/handlers';
 import { RoutingService } from './messaging/routing/RoutingService';
 import {
@@ -15,6 +15,7 @@ import {
   OutboundMessage
   } from './types';
 import { IndyWallet, Wallet } from './Wallet';
+import { url } from 'inspector';
 import {
   handleInvitation,
   handleConnectionRequest,
@@ -22,7 +23,6 @@ import {
   handleAckMessage,
 } from './messaging/connections/handlers';
 import {
-  MessageType as RoutingMessageType,
   createForwardMessage,
   createRouteUpdateMessage,
 } from './messaging/routing/messages';
@@ -69,6 +69,7 @@ class Agent {
 
   async createInvitationUrl() {
     const connection = await this.connectionService.createConnectionWithInvitation(this.agency);
+    console.log(this.config);
     const { invitation } = connection;
 
     if (!invitation) {
@@ -80,7 +81,7 @@ class Agent {
       this.createRoute(connection.verkey, this.agency.connection);
     }
 
-    return encodeInvitationToUrl(invitation);
+    return encodeInvitationToUrl(invitation, this.config.url);
   }
 
   async acceptInvitationUrl(invitationUrl: string) {
@@ -168,7 +169,7 @@ class Agent {
     // TODO I don't like create route logic is here. It should be in handler, but currently, it's not possible to send
     // message directly from handler. If agent is using agency, we need to create a route for newly created connection
     // verkey at agency.
-    if (messageType === ConnectionsMessageType.ConnectionInvitation && this.agency) {
+    if (messageType === MessageType.ConnectionInvitation && this.agency) {
       if (!outboundMessage) {
         throw new Error("No outbound message for connection invitation. It won't be possible to create a route.");
       }
@@ -218,13 +219,13 @@ class Agent {
 
   private registerHandlers() {
     const handlers = {
-      [ConnectionsMessageType.ConnectionInvitation]: handleInvitation(this.connectionService),
-      [ConnectionsMessageType.ConnectionRequest]: handleConnectionRequest(this.connectionService),
-      [ConnectionsMessageType.ConnectionResposne]: handleConnectionResponse(this.connectionService),
-      [ConnectionsMessageType.Ack]: handleAckMessage(this.connectionService),
-      [BasicMessageMessageType.BasicMessage]: handleBasicMessage(this.connectionService),
-      [RoutingMessageType.RouteUpdateMessage]: handleRouteUpdateMessage(this.connectionService, this.routingService),
-      [RoutingMessageType.ForwardMessage]: handleForwardMessage(this.routingService),
+      [MessageType.ConnectionInvitation]: handleInvitation(this.connectionService),
+      [MessageType.ConnectionRequest]: handleConnectionRequest(this.connectionService),
+      [MessageType.ConnectionResposne]: handleConnectionResponse(this.connectionService),
+      [MessageType.Ack]: handleAckMessage(this.connectionService),
+      [MessageType.BasicMessage]: handleBasicMessage(this.connectionService),
+      [MessageType.RouteUpdateMessage]: handleRouteUpdateMessage(this.connectionService, this.routingService),
+      [MessageType.ForwardMessage]: handleForwardMessage(this.routingService),
     };
 
     this.handlers = handlers;

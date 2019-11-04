@@ -4,7 +4,6 @@ dotenv.config();
 
 function config({
   url,
-  port,
   label,
   walletName,
   walletKey,
@@ -12,8 +11,7 @@ function config({
   publicDidSeed,
 }: InitConfig): InitConfig {
   return {
-    url: url || process.env.AGENT_URL || '',
-    port: port || Number(process.env.AGENT_PORT || 3000),
+    url: url || new URL(process.env.AGENT_URL || ''),
     label: label || process.env.AGENT_LABEL || '',
     walletName: walletName || process.env.WALLET_NAME || '',
     walletKey: walletKey || process.env.WALLET_KEY || '',
