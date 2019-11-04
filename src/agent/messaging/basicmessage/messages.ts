@@ -1,8 +1,6 @@
+import { MessageType } from '../messagetype';
 import uuid from 'uuid/v4';
 
-export enum MessageType {
-  BasicMessage = 'did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/basicmessage/1.0/message',
-}
 
 export function createBasicMessage(content: string) {
   return {

@@ -1,4 +1,4 @@
-import { InboundMessage, OutboundMessage, Agency } from '../types';
+import { Agency, InboundMessage, OutboundMessage } from '../types';
 import { Wallet } from '../Wallet';
 
 // TODO This would be replaced by Handler interface, but we also need to change current handlers from function

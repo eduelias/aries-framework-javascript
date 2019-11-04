@@ -1,12 +1,6 @@
+import { Connection, InvitationDetails } from '../../types';
+import { MessageType } from '../messagetype';
 import uuid from 'uuid/v4';
-import { InvitationDetails, Connection } from '../../types';
-
-export enum MessageType {
-  ConnectionInvitation = 'did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0/invitation',
-  ConnectionRequest = 'did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0/request',
-  ConnectionResposne = 'did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0/response',
-  Ack = 'did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/notification/1.0/ack',
-}
 
 export async function createInvitationMessage({
   label,

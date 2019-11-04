@@ -1,8 +1,8 @@
 import { InboundMessage } from '../../types';
 import { ConnectionService } from '../connections/ConnectionService';
-import { RoutingService } from './RoutingService';
-import { Context } from '../interface';
 import { createOutboundMessage } from '../helpers';
+import { Context } from '../interface';
+import { RoutingService } from './RoutingService';
 
 type RouteUpdate = {
   action: 'add' | 'remove';

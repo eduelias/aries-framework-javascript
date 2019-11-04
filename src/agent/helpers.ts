@@ -6,8 +6,8 @@ export function decodeInvitationFromUrl(invitationUrl: string) {
   return invitation;
 }
 
-export function encodeInvitationToUrl(invitation: InvitationDetails): string {
+export function encodeInvitationToUrl(invitation: InvitationDetails, url: URL): string {
   const encodedInvitation = Buffer.from(JSON.stringify(invitation)).toString('base64');
-  const invitationUrl = `https://example.com/ssi?c_i=${encodedInvitation}`;
+  const invitationUrl = `${url.toString()}ssi?c_i=${encodedInvitation}`;
   return invitationUrl;
 }

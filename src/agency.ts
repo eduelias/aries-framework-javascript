@@ -1,45 +1,15 @@
 import { Agent } from './agent/Agent';
-import { InitConfig, OutboundMessage } from './agent/types';
+import { InitConfig } from './agent/types';
 import configManager from './config';
 import logger from './logger';
+import { StorageMessageSender } from './msgsender';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-class StorageMessageSender {
-  messages: { [key: string]: any } = {};
-
-  async sendMessage(message: OutboundMessage, outboundMessage?: OutboundMessage) {
-    const connection = outboundMessage && outboundMessage.connection;
-
-    if (!connection) {
-      throw new Error(`Missing connection. I don't know how and where to send the message.`);
-    }
-
-    if (!connection.theirKey) {
-      throw new Error('Trying to save message without theirKey!');
-    }
-
-    if (!this.messages[connection.theirKey]) {
-      this.messages[connection.theirKey] = [];
-    }
-
-    logger.logJson('Storing message', { connection, message });
-
-    this.messages[connection.theirKey].push(message);
-  }
-
-  takeFirstMessage(verkey: Verkey) {
-    if (this.messages[verkey]) {
-      return this.messages[verkey].shift();
-    }
-    return null;
-  }
-}
-
-export class Agency {
+export class RestAgency {
   public run(env: InitConfig): void {
     const config = configManager(env);
-    const PORT = config.port;
+    const PORT = config.url.port;
     const app = express();
 
     const messageSender = new StorageMessageSender();
@@ -95,6 +65,10 @@ export class Agency {
       // TODO This endpoint is for testing purpose only.
       res.send(messageSender.messages);
     });
+
+    app.get('/ssi', async (req, res) => {
+      res.send({ message: `Here's a nice html to tell you that you're doing it wrong.` })
+    })
 
     app.listen(PORT, async () => {
       await agent.init();
