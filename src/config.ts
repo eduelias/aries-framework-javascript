@@ -1,5 +1,6 @@
 import { InitConfig } from './agent/types';
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 function config({

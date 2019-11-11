@@ -21,3 +21,7 @@ type WalletHandle = number;
 type Did = string;
 type Verkey = string;
 type ByteArray = number[];
+
+declare module "libsodium-wrappers";
+declare module "bs58";
+declare module "dotenv";
