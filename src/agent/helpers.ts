@@ -1,4 +1,5 @@
 import { InvitationDetails } from './types';
+import { URL } from 'url';
 
 export function decodeInvitationFromUrl(invitationUrl: string) {
   const [, encodedInvitation] = invitationUrl.split('c_i=');

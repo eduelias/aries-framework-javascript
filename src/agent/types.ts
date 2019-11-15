@@ -1,3 +1,5 @@
+import { URL } from "url";
+
 export interface InitConfig {
   url: URL;
   label: string;

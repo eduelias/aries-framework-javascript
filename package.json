@@ -43,6 +43,7 @@
     "libsodium-wrappers": "^0.7.6",
     "lodash.isempty": "^4.4.0",
     "node-fetch": "^2.6.0",
+    "tweetnacl": "^1.0.1",
     "uuid": "^3.3.3",
     "zeromq": "^5.1.0"
   }

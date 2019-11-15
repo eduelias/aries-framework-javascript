@@ -5,9 +5,10 @@ import logger from './logger';
 import { StorageMessageSender } from './msgsender';
 import bodyParser from 'body-parser';
 import express from 'express';
-import zmq from 'zeromq'
 import sodium from 'libsodium-wrappers';
 import bs58 from 'bs58'
+import { EventEmitter } from 'events';
+import { IndyReq } from './ledger';
 
 const gtxn = {
   "data": {
@@ -24,7 +25,22 @@ const gtxn = {
   },
   "dest": "Gw6pDLhcBcoQesN72qfotTgFa7cbuqZpkX3Xo6pLhPhv"
 }
+
+class MyError extends Error {
+  public data: any;
+}
+
+function sign(serialized: string, signKey: string): string {
+  const signature = sodium
+    .crypto_sign(Buffer.from(serialized, 'utf8'), signKey)
+    .slice(0, 64);
+  return bs58.encode(Buffer.from(signature));
+}
+
 export class RestAgency {
+  public api: any = new EventEmitter();
+  private reqs: any = {};
+
   public run(env: InitConfig): void {
     const config = configManager(env);
     const PORT = config.url.port;
@@ -42,34 +58,14 @@ export class RestAgency {
     });
 
     app.post('/nym', async (req, res) => {
-      await sodium.ready;
-      const dest = bs58.decode(gtxn.dest);
-      let conf = {
-        serverKey: sodium.crypto_sign_ed25519_pk_to_curve25519(dest),
-        host: gtxn.data.client_ip,
-        port: gtxn.data.client_port,
-      };
-
-      const zsock = zmq.socket('dealer');
-
-      const keypair = zmq.curveKeypair();
-      zsock.identity = keypair.public;
-      zsock.curve_publickey = keypair.public;
-      zsock.curve_secretkey = keypair.secret;
-      zsock.curve_serverkey = conf.serverKey;
-      zsock.linger = 0; // TODO set correct timeout
-      zsock.connect('tcp://' + conf.host + ':' + conf.port);
-
-      zsock.on('message', (msg) => {
-        res.send(msg);
-      });
-
-
-      console.log(req.body);
-      const data = req.body;
-
-      const msg = Buffer.from(JSON.stringify(data))
-      zsock.send(msg);
+      const ledger = IndyReq({ genesisTxn: JSON.stringify({ txn: { data: gtxn } }) });
+      let resp;
+      try {
+        resp = await ledger.send(req.body);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+      res.status(200).json(resp);
     });
 
     // Create new invitation as inviter to invitee
